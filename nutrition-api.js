@@ -1,44 +1,68 @@
-async function analyzeFood() {
-    const fileInput = document.getElementById("foodImageInput");
-    const resultDiv = document.getElementById("result");
+// Nutrition API Module
+class NutritionAPI {
+    // Simulated nutrition database
+    static nutritionDatabase = {
+        'pizza': {
+            name: 'Pizza',
+            calories: 285,
+            protein: 12.2,
+            carbs: 35.6,
+            fat: 10.4,
+            nutrients: ['Calcium', 'Iron', 'Vitamin B'],
+            description: 'A popular Italian dish with various toppings on a bread base.'
+        },
+        'salad': {
+            name: 'Green Salad',
+            calories: 100,
+            protein: 5,
+            carbs: 15,
+            fat: 3,
+            nutrients: ['Vitamin A', 'Vitamin C', 'Folate'],
+            description: 'A healthy mix of fresh green vegetables.'
+        },
+        'burger': {
+            name: 'Hamburger',
+            calories: 250,
+            protein: 17,
+            carbs: 30,
+            fat: 10,
+            nutrients: ['Protein', 'Iron', 'Vitamin B12'],
+            description: 'A classic sandwich consisting of a meat patty in a bun.'
+        },
+        'chicken': {
+            name: 'Grilled Chicken',
+            calories: 165,
+            protein: 31,
+            carbs: 0,
+            fat: 3.6,
+            nutrients: ['Vitamin B6', 'Selenium', 'Phosphorus'],
+            description: 'Lean protein source, low in calories and high in nutrients.'
+        }
+    };
 
-    if (fileInput.files.length === 0) {
-        resultDiv.innerHTML = "<p style='color:red;'>Please upload an image first.</p>";
-        return;
+    // Fetch nutrition information for a given food
+    static async getNutrition(foodName) {
+        // Normalize food name and find best match
+        const normalizedName = foodName.toLowerCase();
+        
+        // Find exact or partial match
+        const matchedFood = Object.entries(this.nutritionDatabase).find(([key, value]) => 
+            normalizedName.includes(key)
+        );
+
+        return matchedFood ? matchedFood[1] : null;
     }
 
-    // Load the MobileNet model (can be replaced with a Food-101 trained model)
-    const model = await tf.loadLayersModel('https://tfhub.dev/google/tfjs-model/mobilenet_v2/classification/1/default/1/model.json');
-    
-    // Convert uploaded image to tensor
-    const img = document.createElement("img");
-    img.src = URL.createObjectURL(fileInput.files[0]);
-    img.onload = async () => {
-        let tensor = tf.browser.fromPixels(img)
-            .resizeNearestNeighbor([224, 224])
-            .toFloat()
-            .expandDims();
-        
-        // Predict the food item
-        let predictions = await model.predict(tensor).data();
-        
-        // Simulated output (replace with actual model prediction)
-        let detectedFood = "Pasta";  // Replace with predictions[0] mapping
-
-        // Fetch nutrition data
-        let nutritionData = {
-            "Pizza": { calories: 285, protein: "12g", fat: "10g", carbs: "36g" },
-            "Pasta": { calories: 220, protein: "8g", fat: "6g", carbs: "40g" }
-        };
-
-        let foodInfo = nutritionData[detectedFood] || { calories: "N/A", protein: "N/A", fat: "N/A", carbs: "N/A" };
-
-        resultDiv.innerHTML = `
-            <p><strong>Food Detected:</strong> ${detectedFood} 🍝</p>
-            <p><strong>Calories:</strong> ${foodInfo.calories} kcal</p>
-            <p><strong>Proteins:</strong> ${foodInfo.protein}</p>
-            <p><strong>Fats:</strong> ${foodInfo.fat}</p>
-            <p><strong>Carbs:</strong> ${foodInfo.carbs}</p>
-        `;
-    };
+    // Optional: Extend with external API call if needed
+    static async fetchNutritionFromAPI(foodName) {
+        try {
+            // Placeholder for external API call
+            // Replace with actual nutrition API endpoint
+            const response = await axios.get(`https://nutrition-api.example.com/food/${foodName}`);
+            return response.data;
+        } catch (error) {
+            console.error('Nutrition API error:', error);
+            return null;
+        }
+    }
 }

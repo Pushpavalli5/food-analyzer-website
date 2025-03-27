@@ -3,17 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Food Analyzer</title>
+    <title>Advanced Food Analyzer</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1>AI-Powered Food Analyzer</h1>
-    <input type="file" id="foodImageInput" accept="image/*">
-    <button onclick="analyzeFood()">Analyze Food</button>
-    <div id="result"></div>
+    <div id="app">
+        <h1>🍽️ Advanced Food Analyzer</h1>
+        <input type="file" id="image-upload" accept="image/*">
+        <div id="image-container"></div>
+        <div id="nutrition-result"></div>
+    </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
-    <script src="script.js"></script>
+    <!-- External Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.11.0/dist/tf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet@2.1.0/dist/mobilenet.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+    <!-- Application Scripts -->
+    <script src="nutrition-api.js"></script>
+    <script src="ml-model.js"></script>
+    <script src="food-analyzer.js"></script>
 </body>
 </html>
-

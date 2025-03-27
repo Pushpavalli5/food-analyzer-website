@@ -4,66 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI Food Analyzer</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h2>Upload a Food Image</h2>
-    <input type="file" id="foodImageInput" accept="image/*" onchange="predictFood()">
-    <img id="preview" style="max-width: 200px; display: none;">
-    <p id="result">Upload an image to analyze.</p>
+    <h1>AI-Powered Food Analyzer</h1>
+    <input type="file" id="foodImageInput" accept="image/*">
+    <button onclick="analyzeFood()">Analyze Food</button>
+    <div id="result"></div>
 
-    <!-- Load TensorFlow.js -->
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet"></script>
-
-    <script>
-        async function predictFood() {
-            const fileInput = document.getElementById("foodImageInput");
-            const resultDiv = document.getElementById("result");
-            const previewImg = document.getElementById("preview");
-
-            if (fileInput.files.length === 0) {
-                resultDiv.innerHTML = "<p style='color:red;'>Please upload an image first.</p>";
-                return;
-            }
-
-            const file = fileInput.files[0];
-            const reader = new FileReader();
-
-            reader.onload = async function(event) {
-                previewImg.src = event.target.result;
-                previewImg.style.display = "block";
-
-                const img = new Image();
-                img.src = event.target.result;
-                img.onload = async function() {
-                    const model = await mobilenet.load();
-                    const predictions = await model.classify(img);
-                    const foodName = predictions[0].className.toLowerCase();
-
-                    const foodDatabase = {
-                        "pizza": { calories: 285, proteins: "12g", fats: "10g", carbs: "36g" },
-                        "burger": { calories: 295, proteins: "17g", fats: "14g", carbs: "30g" },
-                        "pasta": { calories: 220, proteins: "8g", fats: "6g", carbs: "40g" },
-                        "salad": { calories: 150, proteins: "3g", fats: "5g", carbs: "20g" }
-                    };
-
-                    if (foodDatabase[foodName]) {
-                        const food = foodDatabase[foodName];
-                        resultDiv.innerHTML = `
-                            <p><strong>Food Detected:</strong> ${foodName.toUpperCase()}</p>
-                            <p><strong>Calories:</strong> ${food.calories} kcal</p>
-                            <p><strong>Proteins:</strong> ${food.proteins}</p>
-                            <p><strong>Fats:</strong> ${food.fats}</p>
-                            <p><strong>Carbs:</strong> ${food.carbs}</p>
-                        `;
-                    } else {
-                        resultDiv.innerHTML = `<p style='color:red;'>Food not found in database. Detected: ${foodName}</p>`;
-                    }
-                };
-            };
-
-            reader.readAsDataURL(file);
-        }
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
+

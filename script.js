@@ -1,21 +1,24 @@
+const foodDatabase = {
+    "pizza": { calories: 285, proteins: "12g", fats: "10g", carbs: "36g" },
+    "burger": { calories: 295, proteins: "17g", fats: "14g", carbs: "30g" },
+    "pasta": { calories: 220, proteins: "8g", fats: "6g", carbs: "40g" },
+    "salad": { calories: 150, proteins: "3g", fats: "5g", carbs: "20g" }
+};
+
 function analyzeFood() {
-    const fileInput = document.getElementById("foodImageInput");
+    const foodInput = document.getElementById("foodName").value.toLowerCase();
     const resultDiv = document.getElementById("result");
 
-    if (fileInput.files.length === 0) {
-        resultDiv.innerHTML = "<p style='color:red;'>Please upload an image first.</p>";
-        return;
-    }
-
-    resultDiv.innerHTML = "<p>Analyzing food image...</p>";
-
-    setTimeout(() => {
+    if (foodInput in foodDatabase) {
+        const food = foodDatabase[foodInput];
         resultDiv.innerHTML = `
-            <p><strong>Food Detected:</strong> Pizza 🍕</p>
-            <p><strong>Calories:</strong> 285 kcal</p>
-            <p><strong>Proteins:</strong> 12g</p>
-            <p><strong>Fats:</strong> 10g</p>
-            <p><strong>Carbs:</strong> 36g</p>
+            <p><strong>Food Detected:</strong> ${foodInput.toUpperCase()}</p>
+            <p><strong>Calories:</strong> ${food.calories} kcal</p>
+            <p><strong>Proteins:</strong> ${food.proteins}</p>
+            <p><strong>Fats:</strong> ${food.fats}</p>
+            <p><strong>Carbs:</strong> ${food.carbs}</p>
         `;
-    }, 2000);
+    } else {
+        resultDiv.innerHTML = "<p style='color:red;'>Food not found in database.</p>";
+    }
 }
